@@ -8,6 +8,8 @@ package
 		public var player:FlxSprite;
 		
 		[Embed(source="../assets/sounds/bgmusic.mp3")] private var bgmusic:Class;
+		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
+		[Embed(source="../assets/images/Level_2.png")] private var PNGLevel_2:Class;
 		
 		public function PlayState()
 		{	
@@ -62,7 +64,7 @@ package
 			//level structure
 			level = new FlxTilemap();
 			level.auto = FlxTilemap.ALT;
-			level.loadMap(FlxTilemap.arrayToCSV(data,40),FlxTilemap.ImgAuto);
+			level.loadMap(FlxTilemap.pngToCSV(PNGLevel_2,false,2),FlxTilemap.ImgAuto);
 			level.follow();
 			add(level);
 			
