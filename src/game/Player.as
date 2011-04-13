@@ -12,8 +12,8 @@ package game
 			super(X,Y);
 			loadGraphic(ImgPlayer,false);
 			maxVelocity.x = 80;
-			maxVelocity.y = 200;
-			acceleration.y = 200;
+			maxVelocity.y = 400;
+			acceleration.y = 300;
 			drag.x = maxVelocity.x * 4;
 		}
 		

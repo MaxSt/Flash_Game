@@ -29,7 +29,7 @@ package game
 			//level structure
 			level = new FlxTilemap();
 			level.auto = FlxTilemap.ALT;
-			level.loadMap(FlxTilemap.pngToCSV(PNGLevel_1,false,1),FlxTilemap.ImgAuto);
+			level.loadMap(FlxTilemap.pngToCSV(PNGLevel_1,false,2),FlxTilemap.ImgAuto);
 			level.follow();
 			add(level);
 			
