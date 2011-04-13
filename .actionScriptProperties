@@ -29,7 +29,9 @@
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
-  <applications/>
+  <applications>
+    <application path="game/MMP.as"/>
+  </applications>
   <modules/>
   <buildCSSFiles/>
 </actionScriptProperties>
