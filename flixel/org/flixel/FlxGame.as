@@ -286,14 +286,14 @@ package org.flixel
 			_total = mark;
 			FlxG.elapsed = _elapsed;
 			if(FlxG.elapsed > FlxG.maxElapsed)
-				FlxG.elapsed = FlxG.maxElapsed;
+				  FlxG.elapsed = FlxG.maxElapsed;
 			FlxG.elapsed *= FlxG.timeScale;
-			
+			 
 			//Sound tray crap
-			if(_soundTray != null)
+			if (_soundTray != null)
 			{
-				if(_soundTrayTimer > 0)
-					_soundTrayTimer -= _elapsed;
+				 if(_soundTrayTimer > 0)
+				 	_soundTrayTimer -= _elapsed;
 				else if(_soundTray.y > -_soundTray.height)
 				{
 					_soundTray.y -= _elapsed*FlxG.height*2;

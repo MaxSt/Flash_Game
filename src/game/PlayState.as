@@ -21,14 +21,23 @@ package game
 		//level maps
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
 		
-		public var level:FlxTilemap;
-		public var player:Player;
-		public var tonA:Tone;
-		public var tonC:Tone;
+		private var level:FlxTilemap;
+		private var score:FlxText
+		private var player:Player;
+		private var tonA:Tone;
+		private var tonC:Tone;
 		
-		private var timer:Timer = new Timer(1000,1);
-		private var soundGroup:Vector.<Tone> = new Vector.<Tone>();
-		private var soundGroupCopy:Vector.<Tone>;
+		//public var levelToneOrder:Vector.<int> = new Vector.<int>();
+		//public var playedToneOrder:Vector.<int> = new Vector.<int>();
+		
+		public var levelToneOrder:Array = new Array();
+		public var playedToneOrder:Array = new Array();
+		
+		private var timerAddTone:Timer = new Timer(1000,1);
+		private var timerSuccesGame:Timer = new Timer(1000,1);
+		
+		private var sounds:Vector.<Tone> = new Vector.<Tone>();
+		private var soundsCopy:Vector.<Tone>;
 
 		public function PlayState()
 		{	
@@ -42,56 +51,104 @@ package game
 		{
 			FlxState.bgColor = 0xffaaaaff;
 			
-			timer.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);	
+			timerAddTone.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);
+			timerSuccesGame.addEventListener(TimerEvent.TIMER_COMPLETE,playAgain);
 			
 			//level structure
 			level = new FlxTilemap();
 			level.auto = FlxTilemap.ALT;
 			level.loadMap(FlxTilemap.pngToCSV(PNGLevel_1,false,2),FlxTilemap.ImgAuto);
 			level.follow();
-			add(level);
+
+			//score FlxText
+			score = new FlxText(160,230,200);
+			score.setFormat(null, 5, 0x0000AA, "center",2);
 			
 			//Add game objects
 			var player:Player = new Player(150,210);
 			setPlayer(player);
 			FlxG.follow(player);
+			
+			add(level);
+			add(score);
 			add(player);
 			
-			soundGroupCopy = loadSoundGroup();
-			//add(new FlxText(0,0,100,"Hallo, Max!")); //adds a 100px wide text field at position 0,0 (upper left)
+			//saves a copy of the sounds into the Vector.<Tone> soundsCopy
+			soundsCopy = loadSoundGroup();
+			 
 		}
 		
 		override public function update():void
 		{
-			if( soundGroup.length != 0)
-				timer.start();
+			if( sounds.length != 0)
+				timerAddTone.start();
+			
+			if( !this.player.onScreen() ){
+				this.player.kill();
+				FlxG.state = new GameOverState();
+			}
+			
+			if( !checkOrder() && (tonA.isCollided || tonC.isCollided) ){
+				FlxG.state = new GameOverState();
+			}
+			
+			if( checkOrder() && (playedToneOrder.length == levelToneOrder.length) ){
+				timerSuccesGame.start();
+			}
+			
+			/*if( !checkOrder() ){
+				playedToneOrder[playedToneOrder.length]
+				var s:Tone = this.soundsCopy.pop();
+				this.soundsCopy.pop().isCollided = false;
+			}
+			else
+				FlxG.state = new GameOverState();*/
+				
+			//else
 			
 			super.update();
 			collide();
 		}
 		
+		private function checkOrder():Boolean{
+			for(var i:int = 0; i < playedToneOrder.length; i++){
+				if( levelToneOrder[i] == playedToneOrder[i] ){
+					continue;
+				}
+				else
+					return false;
+			}
+			return true;
+		}
+		
 		private function loadSoundGroup():Vector.<Tone>
 		{
-			tonA = new Tone(140,210,SoundA,ImgA,player,1);
+			tonA = new Tone(50,5,SoundA,ImgA,this,player,1);
 			tonA.fixed = true;
-			tonA.moves = false;			
+			tonA.moves = false;
+			levelToneOrder.push(tonA.getOrder());
 			
-			tonC = new Tone(290,20,SoundC,ImgC,player,2);
+			tonC = new Tone(290,20,SoundC,ImgC,this,player,2);
 			tonC.fixed = true;
 			tonC.moves = false;
+			levelToneOrder.push(tonC.getOrder());
 			
-			soundGroup.push(tonA);
-			soundGroup.push(tonC);
+			sounds.push(tonA);
+			sounds.push(tonC);
 			
-			return new Vector.<Tone>(soundGroup);
+			return new Vector.<Tone>(sounds);
 		}
 		
 		private function addTone(e:TimerEvent):void
 		{
-			var sound:Tone = soundGroup.shift();
+			var sound:Tone = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 			this.add(sound);
 			FlxG.play(sound.getSound(),1,false);
-			timer.stop();
+			timerAddTone.stop();
+		}
+		
+		private function playAgain(e:TimerEvent):void{
+			FlxG.state = new YouWonState();
 		}
 		
 		public function setPlayer(player:Player):void
