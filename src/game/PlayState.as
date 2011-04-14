@@ -4,6 +4,7 @@ package game
 	import flash.events.TimerEvent;
 	import flash.ui.*;
 	import flash.utils.Timer;
+	import flash.utils.getTimer;
 	
 	import org.flixel.*;
 	
@@ -22,6 +23,7 @@ package game
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
 		
 		private var level:FlxTilemap;
+		private var elapsedTime:FlxText;
 		private var score:FlxText
 		private var player:Player;
 		private var tonA:Tone;
@@ -50,7 +52,7 @@ package game
 		override public function create():void
 		{
 			FlxState.bgColor = 0xffaaaaff;
-			
+
 			timerAddTone.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);
 			timerSuccesGame.addEventListener(TimerEvent.TIMER_COMPLETE,playAgain);
 			
@@ -60,9 +62,13 @@ package game
 			level.loadMap(FlxTilemap.pngToCSV(PNGLevel_1,false,2),FlxTilemap.ImgAuto);
 			level.follow();
 
+			//elapsed Time FlxText
+			elapsedTime = new FlxText(FlxG.width * 0.5 -180,230,400);
+			elapsedTime.setFormat(null, 8, 0x0000AA, "center",2);
+			
 			//score FlxText
 			score = new FlxText(160,230,200);
-			score.setFormat(null, 5, 0x0000AA, "center",2);
+			score.setFormat(null, 10, 0x0000AA, "center",2);
 			
 			//Add game objects
 			var player:Player = new Player(150,210);
@@ -70,11 +76,12 @@ package game
 			FlxG.follow(player);
 			
 			add(level);
+			add(elapsedTime);
 			add(score);
 			add(player);
 			
 			//saves a copy of the sounds into the Vector.<Tone> soundsCopy
-			soundsCopy = loadSoundGroup();
+			soundsCopy = loadSounds();
 			 
 		}
 		
@@ -106,6 +113,10 @@ package game
 				
 			//else
 			
+			var s:int = parseInt((getTimer()/1000).toString(),10);
+			//var m:int = (int)(s/60);
+			elapsedTime.text = "Time: " + (int)(s/60).toString() + ":" + (s%60).toString();
+			
 			super.update();
 			collide();
 		}
@@ -121,7 +132,7 @@ package game
 			return true;
 		}
 		
-		private function loadSoundGroup():Vector.<Tone>
+		private function loadSounds():Vector.<Tone>
 		{
 			tonA = new Tone(50,5,SoundA,ImgA,this,player,1);
 			tonA.fixed = true;
