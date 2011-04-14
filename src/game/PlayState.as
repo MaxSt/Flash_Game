@@ -41,9 +41,8 @@ package game
 		{
 			FlxState.bgColor = 0xffaaaaff;
 			
-			for(var tone in soundGroup){
-				timer.addEventListener(TimerEvent.TIMER_COMPLETE,addTone(tone ) );	
-			}
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);	
+	
 			
 			//level structure
 			level = new FlxTilemap();
@@ -86,9 +85,11 @@ package game
 			soundGroup.push(tonC);
 		}
 		
-		private function addTone(e:TimerEvent,tone:Tone):void
+		private function addTone(e:TimerEvent):void
 		{
-			add(tone);
+			var sound = soundGroup.pop();
+			add(sound);
+			FlxG.play(sound.getSound(),1,false);
 		}
 		
 		public function setPlayer(player:Player):void

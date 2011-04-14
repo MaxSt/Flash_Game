@@ -24,5 +24,8 @@ package game
 			}
 			super.update();
 		}
+		public function getSound():Class{
+			return this.sound;
+		}
 	}
 }
