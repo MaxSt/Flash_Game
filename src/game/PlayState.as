@@ -1,11 +1,18 @@
 package game
 {
+	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	
 	import org.flixel.*;
+	import org.flixel.data.FlxList;
 	
 	public class PlayState extends FlxState
 	{
 		public var level:FlxTilemap;
 		public var player:Player;
+		public var tonA:Tone;
+		public var tonC:Tone;
 		
 		//tone pictures
 		[Embed(source="../assets/images/toneA.png")] private var ImgA:Class;
@@ -19,18 +26,24 @@ package game
 		//level maps
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
 		
+		private var timer:Timer = new Timer(2000,1);
+		private var soundGroup:Vector.<Tone> = new Vector<Tone>();
+
 		public function PlayState()
 		{	
-			
+			loadSoundGroup();
 			//FlxG.playMusic(bgmusic);
 			
 		}
 		
-
 		
 		override public function create():void
 		{
 			FlxState.bgColor = 0xffaaaaff;
+			
+			for(var sound:Tone in soundGroup){
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);	
+			}
 			
 			//level structure
 			level = new FlxTilemap();
@@ -44,13 +57,14 @@ package game
 			setPlayer(player);
 			FlxG.follow(player);
 			add(player);
-			
-			var tonA:Tone = new Tone(30,10,SoundA,ImgA,player);
+
+			/*
+			tonA = new Tone(30,10,SoundA,ImgA,player);
 			tonA.fixed = true;
 			tonA.moves = false;
-			add(tonA);
+			add(tonA);*/
 			
-			var tonC:Tone = new Tone(290,20,SoundC,ImgC,player);
+			tonC = new Tone(290,20,SoundC,ImgC,player);
 			tonC.fixed = true;
 			tonC.moves = false;
 			add(tonC);
@@ -60,8 +74,22 @@ package game
 		
 		override public function update():void
 		{
+			timer.start();
+			
 			super.update();
 			collide();
+		}
+		
+		private function loadSoundGroup():void{
+			soundGroup.add(tonA);
+			soundGroup.add(tonC);
+		}
+		
+		private function addTone(e:TimerEvent):void
+		{
+			for(var tone:Tone in soundGroup){
+				add(tone);	
+			}
 		}
 		
 		public function setPlayer(player:Player):void
