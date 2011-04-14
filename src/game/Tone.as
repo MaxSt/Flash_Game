@@ -13,7 +13,7 @@ package game
 			this.player = player;
 			this.sound = sound;
 			loadGraphic(ImgSound,false);
-			FlxG.play(sound,1,false);	
+			//FlxG.play(sound,1,false);	
 			flicker(2);
 		}
 		
