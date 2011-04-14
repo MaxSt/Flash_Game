@@ -7,7 +7,6 @@ package game
 		private var player:Player;
 		private var sound:Class;
 		private var order:int;
-		private var collided:Boolean = false;
 		private var pS:PlayState;
 		
 		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, pS:PlayState, player:Player, order:int)
@@ -23,10 +22,8 @@ package game
 		
 		override public function update():void
 		{
-			if( collide(this.player ) && !isCollided ){
+			if( collide(this.player)){
 				FlxG.play(sound,1,false);
-				pS.playedToneOrder.push(this.order);
-				isCollided = true;
 			}
 			super.update();
 		}
@@ -40,12 +37,9 @@ package game
 			return this.order;
 		}
 		
-		public function set isCollided(col:Boolean):void{
-			this.collided = col;
-		}
-		
+
 		public function get isCollided():Boolean{
-			return this.collided;
+			return collide(this.player);
 		}
 	}
 }
