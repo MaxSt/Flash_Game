@@ -87,7 +87,7 @@ package game
 		
 		private function addTone(e:TimerEvent):void
 		{
-			var sound = soundGroup.pop();
+			var sound:Tone = soundGroup.pop();
 			add(sound);
 			FlxG.play(sound.getSound(),1,false);
 		}
