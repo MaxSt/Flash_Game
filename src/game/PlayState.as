@@ -63,8 +63,10 @@ package game
 			level.follow();
 
 			//elapsed Time FlxText
+			/*
 			elapsedTime = new FlxText(FlxG.width * 0.5 -180,230,400);
 			elapsedTime.setFormat(null, 8, 0x0000AA, "center",2);
+			*/
 			
 			//score FlxText
 			score = new FlxText(160,230,200);
@@ -113,9 +115,10 @@ package game
 				
 			//else
 			
+			/*
 			var s:int = parseInt((getTimer()/1000).toString(),10);
 			//var m:int = (int)(s/60);
-			elapsedTime.text = "Time: " + (int)(s/60).toString() + ":" + (s%60).toString();
+			elapsedTime.text = "Time: " + (int)(s/60).toString() + ":" + (s%60).toString();*/
 			
 			super.update();
 			collide();
