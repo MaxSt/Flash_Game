@@ -27,7 +27,7 @@ package game
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
 		
 		private var timer:Timer = new Timer(2000,1);
-		private var soundGroup:Vector.<Tone> = new Vector<Tone>();
+		private var soundGroup:Vector.<Tone> = new Vector.<Tone>();
 
 		public function PlayState()
 		{	
@@ -41,8 +41,8 @@ package game
 		{
 			FlxState.bgColor = 0xffaaaaff;
 			
-			for(var sound:Tone in soundGroup){
-				timer.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);	
+			for(var tone in soundGroup){
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE,addTone(tone ) );	
 			}
 			
 			//level structure
@@ -58,15 +58,8 @@ package game
 			FlxG.follow(player);
 			add(player);
 
-			/*
-			tonA = new Tone(30,10,SoundA,ImgA,player);
-			tonA.fixed = true;
-			tonA.moves = false;
-			add(tonA);*/
 			
-			tonC = new Tone(290,20,SoundC,ImgC,player);
-			tonC.fixed = true;
-			tonC.moves = false;
+			
 			add(tonC);
 			
 			//add(new FlxText(0,0,100,"Hallo, Max!")); //adds a 100px wide text field at position 0,0 (upper left)
@@ -81,15 +74,21 @@ package game
 		}
 		
 		private function loadSoundGroup():void{
-			soundGroup.add(tonA);
-			soundGroup.add(tonC);
+			tonA = new Tone(30,10,SoundA,ImgA,player);
+			tonA.fixed = true;
+			tonA.moves = false;
+						
+			tonC = new Tone(290,20,SoundC,ImgC,player);
+			tonC.fixed = true;
+			tonC.moves = false;
+			
+			soundGroup.push(tonA);
+			soundGroup.push(tonC);
 		}
 		
-		private function addTone(e:TimerEvent):void
+		private function addTone(e:TimerEvent,tone:Tone):void
 		{
-			for(var tone:Tone in soundGroup){
-				add(tone);	
-			}
+			add(tone);
 		}
 		
 		public function setPlayer(player:Player):void
