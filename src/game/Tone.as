@@ -6,15 +6,16 @@ package game
 	{
 		private var player:Player;
 		private var sound:Class;
+		private var order:int;
 		
-		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, player:Player)
+		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, player:Player, order:int)
 		{
 			super(X,Y);
 			this.player = player;
 			this.sound = sound;
+			this.order = order;
 			loadGraphic(ImgSound,false);
 			//FlxG.play(sound,1,false);	
-			flicker(2);
 		}
 		
 		override public function update():void
@@ -24,8 +25,13 @@ package game
 			}
 			super.update();
 		}
+		
 		public function getSound():Class{
 			return this.sound;
+		}
+		
+		public function getOrder():int{
+			return this.order;
 		}
 	}
 }
