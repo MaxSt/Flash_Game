@@ -28,7 +28,12 @@ package game
 			if( collide(this.player) && !isCollided){
 				FlxG.play(sound,1,false);
 				flicker(0.2);
-				player.reset(player.x - 2, player.y);
+				if( collideLeft )
+					player.reset(player.x - 2, player.y);
+				else if( collideRight )
+					player.reset(player.x + 2, player.y);
+				else if( collideTop )
+					player.reset(player.x - 15, player.y - 10);
 				Collided = true;
 			}
 			super.update();

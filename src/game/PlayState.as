@@ -26,12 +26,13 @@ package game
 		private var player:Player;
 		private var tonA:Tone;
 		private var tonC:Tone;
+		private var tonC2:Tone;
 		
 		//public var levelToneOrder:Vector.<int> = new Vector.<int>();
 		//public var playedToneOrder:Vector.<int> = new Vector.<int>();
 		
-		public var levelOrder:Array = new Array(1,1,2);
-		public var levelMaxOrder:int = 3;
+		public var levelOrder:Array = new Array(1,1,2,2,3,3);
+		public var levelMaxOrder:int = 6;
 		public var orderPos:int = 0;
 		
 		public var activeSound:Tone;
@@ -47,6 +48,7 @@ package game
 		public function PlayState()
 		{	
 			FlxG.mouse.show();
+			levelOrder.sort(16); //16 => Array.NUMERIC Sortierung
 			this.addEventListener(Event.ACTIVATE,onFocus);
 			//FlxG.playMusic(bgmusic);
 		}
@@ -142,20 +144,37 @@ package game
 		
 		private function loadSoundGroup():Vector.<Tone>
 		{
-			tonA = new Tone(50,5,SoundA,ImgA,this,player,1,2);
-			tonA.fixed = true;
-			tonA.moves = false;
+			if( containsInt(levelOrder,1) ){
+				tonA = new Tone(50,5,SoundA,ImgA,this,player,1,2);
+				tonA.fixed = true;
+				tonA.moves = false;
+			}
 			
-			tonC = new Tone(290,20,SoundC,ImgC,this,player,2,1);
+			tonC = new Tone(290,20,SoundC,ImgC,this,player,2,2);
 			tonC.fixed = true;
 			tonC.moves = false;
+			
+			tonC2 = new Tone(170,210,SoundC,ImgC,this,player,3,2);
+			tonC2.fixed = true;
+			tonC2.moves = false;
 			
 			var s:Vector.<Tone>  = new Vector.<Tone>();
 			
 			s.push(tonA);
 			s.push(tonC);
+			s.push(tonC2);
 			
 			return s;
+		}
+		
+		private function containsInt(arr:Array, i:int):Boolean{
+			var contain:Boolean = false;
+			
+			for each(var j:int in arr){
+				if( j == i )
+					contain = true
+			}
+			return contain;
 		}
 		
 		private function addTone(e:TimerEvent):void
@@ -163,6 +182,7 @@ package game
 			sound = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 			this.add(sound);
 			FlxG.play(sound.getSound(),1,false);
+			sound.flicker(0.2);
 			while( sound.Repeat > 1 ){
 				timerRepeatSound.start();
 				sound.Repeat--;
@@ -173,6 +193,7 @@ package game
 		
 		private function repeatSound(e:TimerEvent):void{
 			FlxG.play(sound.getSound(),1,false);
+			sound.flicker(0.2);
 			timerRepeatSound.stop();
 		}
 		
