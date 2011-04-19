@@ -30,14 +30,17 @@ package game
 		//public var levelToneOrder:Vector.<int> = new Vector.<int>();
 		//public var playedToneOrder:Vector.<int> = new Vector.<int>();
 		
+		public var levelOrder:Array = new Array(1,1,2);
 		public var levelMaxOrder:int = 3;
-		public var orderPos:int = 1;
+		public var orderPos:int = 0;
 		
 		public var activeSound:Tone;
 		
-		private var timerAddTone:Timer = new Timer(1000,1);
+		private var timerAddTone:Timer = new Timer(2000,1);
 		private var timerSuccesGame:Timer = new Timer(1000,1);
+		private var timerRepeatSound:Timer = new Timer(1000,1);
 		
+		private var sound:Tone;
 		private var sounds:Vector.<Tone> = new Vector.<Tone>();
 		private var soundsCopy:Vector.<Tone> = new Vector.<Tone>();
 
@@ -55,6 +58,7 @@ package game
 			
 			timerAddTone.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);
 			timerSuccesGame.addEventListener(TimerEvent.TIMER_COMPLETE,playAgain);
+			timerRepeatSound.addEventListener(TimerEvent.TIMER_COMPLETE,repeatSound);
 			
 			//level structure
 			level = new FlxTilemap();
@@ -98,6 +102,7 @@ package game
 			if(activeSound){
 				if( checkOrder(activeSound) ){
 					orderPos += 1;
+					//showScore();
 					activeSound.Collided = false;
 					if(orderPos == levelMaxOrder){
 						timerSuccesGame.start();
@@ -123,7 +128,7 @@ package game
 		}
 		
 		private function checkOrder(sound:Tone):Boolean{
-			return (sound.getOrder() == orderPos)
+			return (sound.getOrder() == levelOrder[orderPos])
 		}
 		
 		private function getColidedSound():Tone{
@@ -137,11 +142,11 @@ package game
 		
 		private function loadSoundGroup():Vector.<Tone>
 		{
-			tonA = new Tone(50,5,SoundA,ImgA,this,player,1);
+			tonA = new Tone(50,5,SoundA,ImgA,this,player,1,2);
 			tonA.fixed = true;
 			tonA.moves = false;
 			
-			tonC = new Tone(290,20,SoundC,ImgC,this,player,2);
+			tonC = new Tone(290,20,SoundC,ImgC,this,player,2,1);
 			tonC.fixed = true;
 			tonC.moves = false;
 			
@@ -155,10 +160,20 @@ package game
 		
 		private function addTone(e:TimerEvent):void
 		{
-			var sound:Tone = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
+			sound = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 			this.add(sound);
 			FlxG.play(sound.getSound(),1,false);
+			while( sound.Repeat > 1 ){
+				timerRepeatSound.start();
+				sound.Repeat--;
+			}
+			//FlxG.play(sound.getSound(),1,false);
 			timerAddTone.stop();
+		}
+		
+		private function repeatSound(e:TimerEvent):void{
+			FlxG.play(sound.getSound(),1,false);
+			timerRepeatSound.stop();
 		}
 		
 		private function playAgain(e:TimerEvent):void{
