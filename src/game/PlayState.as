@@ -39,7 +39,7 @@ package game
 		private var timerSuccesGame:Timer = new Timer(1000,1);
 		
 		private var sounds:Vector.<Tone> = new Vector.<Tone>();
-		private var soundsCopy:Vector.<Tone>;
+		private var soundsCopy:Vector.<Tone> = new Vector.<Tone>();
 
 		public function PlayState()
 		{	
@@ -53,10 +53,8 @@ package game
 		{
 			FlxState.bgColor = 0xffaaaaff;
 			
-			soundsCopy = loadSoundGroup();
 			timerAddTone.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);
 			timerSuccesGame.addEventListener(TimerEvent.TIMER_COMPLETE,playAgain);
-			sounds = loadSoundGroup();
 			
 			//level structure
 			level = new FlxTilemap();
@@ -78,13 +76,16 @@ package game
 			add(player);
 			
 			//saves a copy of the sounds into the Vector.<Tone> soundsCopy
-			soundsCopy = loadSoundGroup();
-			 
+			sounds = loadSoundGroup();
+			
+			for each(var s:Tone in sounds){
+				soundsCopy.push(s);	
+			}
 		}
 		
 		override public function update():void
 		{
-			if( sounds.length != 0)
+			if( sounds.length != 0 && soundsCopy.length != 0)
 				timerAddTone.start();
 			
 			if( !this.player.onScreen() ){
@@ -93,9 +94,11 @@ package game
 			}
 		
 			activeSound = getColidedSound();
+			trace(activeSound);
 			if(activeSound){
 				if( checkOrder(activeSound) ){
 					orderPos += 1;
+					activeSound.Collided = false;
 					if(orderPos == levelMaxOrder){
 						timerSuccesGame.start();
 					}	
@@ -124,13 +127,12 @@ package game
 		}
 		
 		private function getColidedSound():Tone{
-			var sound:Tone = null;
-			for each(var s:Tone in sounds){
+			for each(var s:Tone in soundsCopy){
 				if (s.isCollided){
-					sound = s;
+					return s;
 				}
 			}
-			return sound;
+			return null;
 		}
 		
 		private function loadSoundGroup():Vector.<Tone>
@@ -153,7 +155,7 @@ package game
 		
 		private function addTone(e:TimerEvent):void
 		{
-			var sound:Tone = soundsCopy.shift(); //shift removes the first of the vector, and the others shift 1 position to left
+			var sound:Tone = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 			this.add(sound);
 			FlxG.play(sound.getSound(),1,false);
 			timerAddTone.stop();
