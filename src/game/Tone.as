@@ -9,17 +9,15 @@ package game
 		private var order:int;
 		private var pS:PlayState;
 		private var collided:Boolean;
-		private var repeat:int;
 		private var added:Boolean = false;
 		
-		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, pS:PlayState, player:Player, order:int, repeat:int)
+		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, pS:PlayState, player:Player, order:int)
 		{
 			super(X,Y);
 			this.pS = pS;
 			this.player = player;
 			this.sound = sound;
 			this.order = order;
-			this.repeat = repeat;
 			loadGraphic(ImgSound,false);
 			//FlxG.play(sound,1,false);	
 		}
@@ -56,14 +54,7 @@ package game
 		public function get isCollided():Boolean{
 			return this.collided;
 		}
-		
-		public function set Repeat(rep:int):void{
-			this.repeat = rep;
-		}
-		
-		public function get Repeat():int{
-			return this.repeat;
-		}
+	
 		
 		public function set Added(a:Boolean):void{
 			this.added = a;

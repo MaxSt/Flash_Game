@@ -14,9 +14,14 @@ package game
 		[Embed(source="../assets/images/toneB.png")] private var ImgB:Class;
 		[Embed(source="../assets/images/toneC.png")] private var ImgC:Class;
 		
+		
 		//tone sounds
 		[Embed(source="../assets/sounds/toneA.mp3")] private var SoundA:Class;
+		[Embed(source="../assets/sounds/toneB.mp3")] private var SoundB:Class;
 		[Embed(source="../assets/sounds/toneC.mp3")] private var SoundC:Class;
+
+		private var all_tones:Vector.<Class,Class> = new Vector.<Class,Class>((ImgA,SoundA),(ImgB,SoundB),(ImgC,SoundC));
+		private var all_positions:Vector.<int,int> = new Vector.<int,int>((50,5),(290,20),(170,210));
 		
 		//level maps
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
@@ -26,7 +31,7 @@ package game
 		private var player:Player;
 		private var tonA:Tone;
 		private var tonC:Tone;
-		private var tonC2:Tone;
+		private var tonB:Tone;
 		
 		//public var levelToneOrder:Vector.<int> = new Vector.<int>();
 		//public var playedToneOrder:Vector.<int> = new Vector.<int>();
@@ -159,33 +164,18 @@ package game
 		
 		private function loadSoundGroup():Vector.<Tone>
 		{
-			var countTonA:int = countSound(levelOrder,1);
-			var countTonC:int = countSound(levelOrder,2);
-			var countTonC2:int = countSound(levelOrder,3);
+			var randomToneIndex:int;
+			var randomPositionIndex:int;
+			var randomTone:Tone;
 			var s:Vector.<Tone>  = new Vector.<Tone>(levelOrder.length);
 			
-			if( countTonA > 0){
-				tonA = new Tone(50,5,SoundA,ImgA,this,player,1,countTonA);
-				tonA.fixed = true;
-				tonA.moves = false;
-				s[levelOrderCopy_2.indexOf(1,0)] = tonA;
-				//s.push(tonA);
-			}
-			
-			if( countTonC > 0){
-				tonC = new Tone(290,20,SoundC,ImgC,this,player,2,countTonC);
-				tonC.fixed = true;
-				tonC.moves = false;
-				s[levelOrderCopy_2.indexOf(2,0)] = tonC;
-				//s.push(tonC);
-			}
-			
-			if( countTonC2 > 0){
-				tonC2 = new Tone(170,210,SoundC,ImgC,this,player,3,countTonC2);
-				tonC2.fixed = true;
-				tonC2.moves = false;
-				s[levelOrderCopy_2.indexOf(3,0)] = tonC2;
-				//s.push(tonC2);
+			for(var i:int = 0; i > levelMaxOrder; i++){
+				randomToneIndex = FlxU.random() * all_tones.length;
+				randomPositionIndex = FlxU.random() * all_positions.length;
+				randomTone= new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],this,player,1);
+				randomTone.fixed = true;
+				randomTone.moves = false;
+				s.push(randomTone);
 			}
 			
 			return s;
@@ -203,28 +193,11 @@ package game
 		
 		private function addTone(e:TimerEvent):void
 		{
-			//sound = sounds[levelOrderCopy_2.shift()-1];
 			sound = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 			this.add(sound);
 			sound.Added = true;
 			FlxG.play(sound.getSound(),1,false);
 			sound.flicker(0.2);
-			
-			var ord:int = levelOrderCopy_1.shift();
-			if( sound.getOrder() ==  ord ){
-				while( sound.Repeat > 1 ){
-					timerRepeatSound.start();
-					sound.Repeat--;
-				}
-			}
-			else
-				levelOrderCopy_1.unshift(ord);
-			/*
-			while( sound.Repeat > 1 ){
-				timerRepeatSound.start();
-				sound.Repeat--;
-			}*/
-			//FlxG.play(sound.getSound(),1,false);
 			timerAddTone.stop();
 		}
 		
