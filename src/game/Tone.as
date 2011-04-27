@@ -10,6 +10,7 @@ package game
 		private var pS:PlayState;
 		private var collided:Boolean;
 		private var repeat:int;
+		private var added:Boolean = false;
 		
 		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, pS:PlayState, player:Player, order:int, repeat:int)
 		{
@@ -62,6 +63,14 @@ package game
 		
 		public function get Repeat():int{
 			return this.repeat;
+		}
+		
+		public function set Added(a:Boolean):void{
+			this.added = a;
+		}
+		
+		public function get isAdded():Boolean{
+			return this.added;
 		}
 	}
 }
