@@ -20,8 +20,11 @@ package game
 		[Embed(source="../assets/sounds/toneB.mp3")] private var SoundB:Class;
 		[Embed(source="../assets/sounds/toneC.mp3")] private var SoundC:Class;
 
-		private var all_tones:Vector.<Class,Class> = new Vector.<Class,Class>((ImgA,SoundA),(ImgB,SoundB),(ImgC,SoundC));
-		private var all_positions:Vector.<int,int> = new Vector.<int,int>((50,5),(290,20),(170,210));
+		//private var all_tones:Vector.<Class,Class> = new Vector.<Class,Class>((ImgA,SoundA),(ImgB,SoundB),(ImgC,SoundC));
+		//private var all_positions:Vector.<int,int> = new Vector.<int,int>((50,5),(290,20),(170,210));
+		
+		private var all_tones:Array = new Array( new Array(ImgA,SoundA), new Array(ImgB,SoundB), new Array(ImgC,SoundC) );
+		private var all_positions:Array = new Array( new Array(50,5), new Array(290,20), new Array(170,210) );
 		
 		//level maps
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
@@ -66,7 +69,6 @@ package game
 			
 			timerAddTone.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);
 			timerSuccesGame.addEventListener(TimerEvent.TIMER_COMPLETE,playAgain);
-			timerRepeatSound.addEventListener(TimerEvent.TIMER_COMPLETE,repeatSound);
 			
 			//level structure
 			level = new FlxTilemap();
@@ -169,13 +171,13 @@ package game
 			var randomTone:Tone;
 			var s:Vector.<Tone>  = new Vector.<Tone>(levelOrder.length);
 			
-			for(var i:int = 0; i > levelMaxOrder; i++){
+			for(var i:int = 0; i < levelMaxOrder; i++){
 				randomToneIndex = FlxU.random() * all_tones.length;
 				randomPositionIndex = FlxU.random() * all_positions.length;
 				randomTone= new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],this,player,1);
 				randomTone.fixed = true;
 				randomTone.moves = false;
-				s.push(randomTone);
+				s[randomToneIndex] = randomTone;
 			}
 			
 			return s;
@@ -199,12 +201,6 @@ package game
 			FlxG.play(sound.getSound(),1,false);
 			sound.flicker(0.2);
 			timerAddTone.stop();
-		}
-		
-		private function repeatSound(e:TimerEvent):void{
-			FlxG.play(sound.getSound(),1,false);
-			sound.flicker(0.2);
-			timerRepeatSound.stop();
 		}
 		
 		private function playAgain(e:TimerEvent):void{
