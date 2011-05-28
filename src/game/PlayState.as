@@ -35,13 +35,8 @@ package game
 		private var tonA:Tone;
 		private var tonC:Tone;
 		private var tonB:Tone;
+
 		
-		//public var levelToneOrder:Vector.<int> = new Vector.<int>();
-		//public var playedToneOrder:Vector.<int> = new Vector.<int>();
-		
-		public var levelOrder:Array = new Array(3,2,3);
-		public var levelOrderCopy_1:Array = new Array();
-		public var levelOrderCopy_2:Array = new Array();
 		public var levelMaxOrder:int = 3;
 		public var orderPos:int = 0;
 		
@@ -89,13 +84,8 @@ package game
 			add(score);
 			add(player);
 			
-			for each(var i:int in levelOrder){
-				levelOrderCopy_1.push(i);
-			}
-			
-			for each(var j:int in levelOrder){
-				levelOrderCopy_2.push(j);
-			}
+
+	
 			
 			//saves a copy of the sounds into the Vector.<Tone> soundsCopy
 			sounds = loadSoundGroup();
@@ -103,12 +93,12 @@ package game
 			for each(var s:Tone in sounds){
 				soundsCopy.push(s);	
 			}
-			//levelOrder.sort(16); //16 => Array.NUMERIC Sortierung
+			
 		}
 		
 		override public function update():void
 		{
-			if( sounds.length != 0 && soundsCopy.length != 0)
+			if( sounds.length >= 0)
 				timerAddTone.start();
 			
 			if( !this.player.onScreen() ){
@@ -125,6 +115,7 @@ package game
 					orderPos += 1;
 					//showScore();
 					activeSound.Collided = false;
+					activeSound.kill();
 					if(orderPos == levelMaxOrder){
 						timerSuccesGame.start();
 					}	
@@ -149,7 +140,9 @@ package game
 		}
 		
 		private function checkOrder(sound:Tone):Boolean{
-			return (sound.getOrder() == levelOrder[orderPos])
+			add(new FlxText(50,50,100, "sount.getOrder = " + sound.getOrder()));
+			//return (sound.getOrder() == orderPos)
+			return true;
 		}
 		
 		private function getColidedSound():Tone{
@@ -169,12 +162,12 @@ package game
 			var randomToneIndex:int;
 			var randomPositionIndex:int;
 			var randomTone:Tone;
-			var s:Vector.<Tone>  = new Vector.<Tone>(levelOrder.length);
+			var s:Vector.<Tone>  = new Vector.<Tone>(levelMaxOrder);
 			
 			for(var i:int = 0; i < levelMaxOrder; i++){
 				randomToneIndex = FlxU.random() * all_tones.length;
 				randomPositionIndex = FlxU.random() * all_positions.length;
-				randomTone= new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],this,player,1);
+				randomTone= new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],this,player,i);
 				randomTone.fixed = true;
 				randomTone.moves = false;
 				s[randomToneIndex] = randomTone;
@@ -197,6 +190,7 @@ package game
 		{
 			sound = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 			this.add(sound);
+			add(new FlxText(70,10 + 80*sounds.length,100, "sound = " + sound.getOrder()));
 			sound.Added = true;
 			FlxG.play(sound.getSound(),1,false);
 			sound.flicker(0.2);

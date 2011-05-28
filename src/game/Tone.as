@@ -10,16 +10,25 @@ package game
 		private var pS:PlayState;
 		private var collided:Boolean;
 		private var added:Boolean = false;
+		private var ImgSound:Class;
 		
 		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, pS:PlayState, player:Player, order:int)
 		{
 			super(X,Y);
+			this.x = x;
+			this.y = y;
 			this.pS = pS;
 			this.player = player;
 			this.sound = sound;
 			this.order = order;
-			loadGraphic(ImgSound,false);
+			this.ImgSound = ImgSound;
+			anzeigen();
 			//FlxG.play(sound,1,false);	
+		}
+		
+		public function anzeigen():void
+		{
+			this.loadGraphic(ImgSound,false);
 		}
 		
 		override public function update():void
