@@ -26,6 +26,7 @@ package game
 		private var all_tones:Array = new Array( new Array(ImgA,SoundA), new Array(ImgB,SoundB), new Array(ImgC,SoundC) );
 		private var all_positions:Array = new Array( new Array(50,5), new Array(290,20), new Array(170,210) );
 		
+		
 		//level maps
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
 		
@@ -140,7 +141,7 @@ package game
 		}
 		
 		private function checkOrder(sound:Tone):Boolean{
-			add(new FlxText(50,50,100, "sount.getOrder = " + sound.getOrder()));
+			add(new FlxText(50,50,100, "sount.getOrder = " + sound.getOrder())); //DEBUG ZEILE
 			//return (sound.getOrder() == orderPos)
 			return true;
 		}
@@ -167,6 +168,7 @@ package game
 			for(var i:int = 0; i < levelMaxOrder; i++){
 				randomToneIndex = FlxU.random() * all_tones.length;
 				randomPositionIndex = FlxU.random() * all_positions.length;
+				add(new FlxText(150,10 + 30*i,100, "pos = " + randomPositionIndex + ", bild = 0" + randomToneIndex)); // DEBUG Zeile INFO: Er kann nicht mehrere Elemente mit dem gleichen Ton bzw. Bild erzeugen! TOFIX
 				randomTone= new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],this,player,i);
 				randomTone.fixed = true;
 				randomTone.moves = false;
@@ -190,7 +192,7 @@ package game
 		{
 			sound = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 			this.add(sound);
-			add(new FlxText(70,10 + 80*sounds.length,100, "sound = " + sound.getOrder()));
+			add(new FlxText(70,10 + 80*sounds.length,100, "sound = " + sound.getOrder())); //DEBUG ZEILE
 			sound.Added = true;
 			FlxG.play(sound.getSound(),1,false);
 			sound.flicker(0.2);
