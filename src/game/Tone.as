@@ -34,6 +34,7 @@ package game
 		override public function update():void
 		{
 			if( collide(this.player) && !isCollided){
+				this.kill();
 				FlxG.play(sound,1,false);
 				flicker(0.2);
 				if( collideLeft )

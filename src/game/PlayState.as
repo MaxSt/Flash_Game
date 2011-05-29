@@ -36,6 +36,8 @@ package game
 		private var tonA:Tone;
 		private var tonC:Tone;
 		private var tonB:Tone;
+		
+		private var timer:Number = 1;
 
 		
 		public var levelMaxOrder:int = 3;
@@ -43,12 +45,15 @@ package game
 		
 		public var activeSound:Tone;
 		
+		public var kill:Boolean = false;
+		
 		private var timerAddTone:Timer = new Timer(2000,1);
 		private var timerSuccesGame:Timer = new Timer(1000,1);
 		private var timerRepeatSound:Timer = new Timer(1000,1);
 		
 		private var sound:Tone;
 		private var sounds:Vector.<Tone> = new Vector.<Tone>();
+		private var soundsShow:Vector.<Tone> = new Vector.<Tone>();
 		private var soundsCopy:Vector.<Tone> = new Vector.<Tone>();
 
 		public function PlayState()
@@ -91,21 +96,58 @@ package game
 			//saves a copy of the sounds into the Vector.<Tone> soundsCopy
 			sounds = loadSoundGroup();
 			
+			sounds.reverse();
+			
 			for each(var s:Tone in sounds){
-				soundsCopy.push(s);	
+				soundsCopy.push(s); 
 			}
+	
+			
 			
 		}
 		
 		override public function update():void
 		{
-			if( sounds.length > 0)
-				timerAddTone.start();
+			if (sounds.length > 0 ){
+				player.fixed = true;
+				player.moves = false;	
+				player.visible = false;
+			}else{
+				player.fixed = false;
+				player.moves = true;
+				player.visible = true;
+			}
+			
+			if (kill == true){
+				timer -= FlxG.elapsed;
+				if (timer <= 0)
+				{
+					timer = 1;
+					sound.kill();
+					kill = false;
+				}
+			}
+			else{
+				if( soundsShow.length > 0){
+					timerAddTone.start();
+				}
+				else{
+					if(sounds.length > 0){
+						sound = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
+						this.add(sound);
+						sound.Added = true;
+						//add(new FlxText(70,10 + 80*sounds.length,100, "sound = " + sound.getOrder())); //DEBUG ZEILE
+					}
+							
+				}
+			}
+			
 			
 			if( !this.player.onScreen() ){
 				this.player.kill();
 				FlxG.state = new GameOverState();
 			}
+			
 		
 			
 			
@@ -116,7 +158,7 @@ package game
 					orderPos += 1;
 					//showScore();
 					activeSound.Collided = false;
-					activeSound.kill();
+					//activeSound.kill();
 					if(orderPos == levelMaxOrder){
 						timerSuccesGame.start();
 					}	
@@ -173,6 +215,7 @@ package game
 				randomTone.fixed = true;
 				randomTone.moves = false;
 				s[i] = randomTone;
+				soundsShow.push(new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],this,player,i));	
 			}
 			
 			return s;
@@ -190,13 +233,14 @@ package game
 		
 		private function addTone(e:TimerEvent):void
 		{
-			sound = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
+			sound = soundsShow.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 			this.add(sound);
-			add(new FlxText(70,10 + 80*sounds.length,100, "sound = " + sound.getOrder())); //DEBUG ZEILE
+			//add(new FlxText(70,10 + 80*sounds.length,100, "sound = " + sound.getOrder())); //DEBUG ZEILE
 			sound.Added = true;
 			FlxG.play(sound.getSound(),1,false);
 			sound.flicker(0.2);
-			timerAddTone.stop();
+			kill = true;
+			
 		}
 		
 		private function playAgain(e:TimerEvent):void{
