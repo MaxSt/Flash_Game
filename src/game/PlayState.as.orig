@@ -4,6 +4,7 @@ package game
 	import flash.events.TimerEvent;
 	import flash.ui.*;
 	import flash.utils.Timer;
+	import flash.utils.getTimer;
 	
 	import org.flixel.*;
 	
@@ -31,6 +32,7 @@ package game
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
 		
 		private var level:FlxTilemap;
+		private var elapsedTime:FlxText;
 		private var score:FlxText
 		private var player:Player;
 		private var tonA:Tone;
@@ -62,7 +64,7 @@ package game
 		override public function create():void
 		{
 			FlxState.bgColor = 0xffaaaaff;
-			
+
 			timerAddTone.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);
 			timerSuccesGame.addEventListener(TimerEvent.TIMER_COMPLETE,playAgain);
 			
@@ -72,9 +74,15 @@ package game
 			level.loadMap(FlxTilemap.pngToCSV(PNGLevel_1,false,2),FlxTilemap.ImgAuto);
 			level.follow();
 
+			//elapsed Time FlxText
+			/*
+			elapsedTime = new FlxText(FlxG.width * 0.5 -180,230,400);
+			elapsedTime.setFormat(null, 8, 0x0000AA, "center",2);
+			*/
+			
 			//score FlxText
 			score = new FlxText(160,230,200);
-			score.setFormat(null, 5, 0x0000AA, "center",2);
+			score.setFormat(null, 10, 0x0000AA, "center",2);
 			
 			//Add game objects
 			var player:Player = new Player(150,210);
@@ -82,6 +90,7 @@ package game
 			FlxG.follow(player);
 			
 			add(level);
+			add(elapsedTime);
 			add(score);
 			add(player);
 			
@@ -89,17 +98,23 @@ package game
 	
 			
 			//saves a copy of the sounds into the Vector.<Tone> soundsCopy
+<<<<<<< HEAD
 			sounds = loadSoundGroup();
 			
 			for each(var s:Tone in sounds){
 				soundsCopy.push(s);	
 			}
 			
+=======
+			soundsCopy = loadSounds();
+			 
+>>>>>>> 6b97690c28dea5289ebd4eb47b70be2e3b911941
 		}
 		
 		override public function update():void
 		{
-			
+			if( sounds.length >= 0)
+				timerAddTone.start();
 			
 			if( !this.player.onScreen() ){
 				this.player.kill();
@@ -135,14 +150,19 @@ package game
 				
 			//else
 			
+			/*
+			var s:int = parseInt((getTimer()/1000).toString(),10);
+			//var m:int = (int)(s/60);
+			elapsedTime.text = "Time: " + (int)(s/60).toString() + ":" + (s%60).toString();*/
+			
 			super.update();
 			collide();
 		}
 		
 		private function checkOrder(sound:Tone):Boolean{
 			add(new FlxText(50,50,100, "sount.getOrder = " + sound.getOrder())); //DEBUG ZEILE
-			return (sound.getOrder() == orderPos)
-			//return true;
+			//return (sound.getOrder() == orderPos)
+			return true;
 		}
 		
 		private function getColidedSound():Tone{
@@ -157,7 +177,7 @@ package game
 			return null;
 		}
 		
-		private function loadSoundGroup():Vector.<Tone>
+		private function loadSounds():Vector.<Tone>
 		{
 			var randomToneIndex:int;
 			var randomPositionIndex:int;
@@ -165,14 +185,13 @@ package game
 			var s:Vector.<Tone>  = new Vector.<Tone>(levelMaxOrder);
 			
 			for(var i:int = 0; i < levelMaxOrder; i++){
-				randomToneIndex = FlxU.random() * all_tones.length;	
+				randomToneIndex = FlxU.random() * all_tones.length;
 				randomPositionIndex = FlxU.random() * all_positions.length;
-				
 				add(new FlxText(150,10 + 30*i,100, "pos = " + randomPositionIndex + ", bild = 0" + randomToneIndex)); // DEBUG Zeile INFO: Er kann nicht mehrere Elemente mit dem gleichen Ton bzw. Bild erzeugen! TOFIX
 				randomTone= new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],this,player,i);
 				randomTone.fixed = true;
 				randomTone.moves = false;
-				s[i] = randomTone;
+				s[randomToneIndex] = randomTone;
 			}
 			
 			return s;
