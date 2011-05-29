@@ -99,7 +99,7 @@ package game
 		
 		override public function update():void
 		{
-			if( sounds.length >= 0)
+			if( sounds.length > 0)
 				timerAddTone.start();
 			
 			if( !this.player.onScreen() ){
