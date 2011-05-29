@@ -142,8 +142,8 @@ package game
 		
 		private function checkOrder(sound:Tone):Boolean{
 			add(new FlxText(50,50,100, "sount.getOrder = " + sound.getOrder())); //DEBUG ZEILE
-			//return (sound.getOrder() == orderPos)
-			return true;
+			return (sound.getOrder() == orderPos)
+			//return true;
 		}
 		
 		private function getColidedSound():Tone{
@@ -172,7 +172,7 @@ package game
 				randomTone= new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],this,player,i);
 				randomTone.fixed = true;
 				randomTone.moves = false;
-				s[randomToneIndex] = randomTone;
+				s[i] = randomTone;
 			}
 			
 			return s;
