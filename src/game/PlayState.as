@@ -99,8 +99,12 @@ package game
 		
 		override public function update():void
 		{
-			if( sounds.length >= 0)
+			
+			var s:Tone = sounds.shift();
+			if( sounds.length >= 0 && s != null){
+				sounds.unshift(s);
 				timerAddTone.start();
+			}
 			
 			if( !this.player.onScreen() ){
 				this.player.kill();
@@ -166,8 +170,11 @@ package game
 			var s:Vector.<Tone>  = new Vector.<Tone>(levelMaxOrder);
 			
 			for(var i:int = 0; i < levelMaxOrder; i++){
-				randomToneIndex = FlxU.random() * all_tones.length;
-				randomPositionIndex = FlxU.random() * all_positions.length;
+				do{
+					randomToneIndex = FlxU.random() * all_tones.length;	
+				}
+				while( s[randomToneIndex] != null )
+				
 				add(new FlxText(150,10 + 30*i,100, "pos = " + randomPositionIndex + ", bild = 0" + randomToneIndex)); // DEBUG Zeile INFO: Er kann nicht mehrere Elemente mit dem gleichen Ton bzw. Bild erzeugen! TOFIX
 				randomTone= new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],this,player,i);
 				randomTone.fixed = true;

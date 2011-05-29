@@ -15,8 +15,8 @@ package game
 		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, pS:PlayState, player:Player, order:int)
 		{
 			super(X,Y);
-			this.x = x;
-			this.y = y;
+			this.x = X;
+			this.y = Y;
 			this.pS = pS;
 			this.player = player;
 			this.sound = sound;
