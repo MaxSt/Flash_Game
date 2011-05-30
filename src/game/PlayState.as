@@ -33,7 +33,8 @@ package game
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
 		
 		private var level:FlxTilemap;
-		private var score:FlxText
+		private var labelScore:FlxText;
+		private var score:FlxText;
 		private var player:Player;
 		private var tonA:Tone;
 		private var tonC:Tone;
@@ -80,10 +81,14 @@ package game
 			level.follow();
 
 			//score FlxText
-			score = new FlxText(170,5,200);
-			score.setFormat(null, 5, 0x0000AA, "center",2);
+			labelScore = new FlxText(150,1,200);
+			labelScore.setFormat(null, 8, 0xFFFFFF, "center",2);
+			score = new FlxText(170,1,200);
+			score.setFormat(null, 8, 0xFFFFFF, "center",2);
 			
-			score.text = "Score: " + FlxG.score.toString();
+			labelScore.text = "Score: ";
+			score.text = FlxG.score.toString();
+			labelScore.text.concat(score.text);
 			
 			//Add game objects
 			var player:Player = new Player(150,210);
@@ -91,6 +96,7 @@ package game
 			FlxG.follow(player);
 			
 			add(level);
+			add(labelScore);
 			add(score);
 			add(player);
 			
@@ -164,7 +170,7 @@ package game
 			if(activeSound){
 				if( checkOrder(activeSound) ){
 					orderPos += 1;
-					//showScore();
+					score.text = ( FlxG.score + 1 ).toString();
 					activeSound.Collided = false;
 					activeSound.Killed = true;
 					activeSound.kill();
