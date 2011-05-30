@@ -87,17 +87,21 @@ package game
 			level.follow();
 
 			//score FlxText
+<<<<<<< HEAD
 			labelScore = new FlxText(150,1,200);
 			labelScore.setFormat(null, 8, 0xFFFFFF, "center",2);
 			score = new FlxText(170,1,200);
 			score.setFormat(null, 8, 0xFFFFFF, "center",2);
-			score = new FlxText(160,230,200);
-			score.setFormat(null, 5, 0x0000AA, "center",2);
 			
 			labelScore.text = "Score: ";
 			score.text = FlxG.score.toString();
 			labelScore.text.concat(score.text);
 			
+=======
+			score = new FlxText(160,230,200);
+			score.setFormat(null, 5, 0x0000AA, "center",2);
+			
+>>>>>>> ad4a2639971a1c669e98d827a37e43230c2d33cc
 			//Add game objects
 			var player:Player = new Player(150,210);
 			setPlayer(player);
