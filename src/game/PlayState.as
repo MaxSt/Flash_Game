@@ -99,8 +99,8 @@ package game
 			for each(var i:Tone in sounds){
 				for each(var j:Tone in sounds){
 					if(i.overlaps(j))
-						if(j.getOrder() < s.getOrder())
-							i.visible = false
+						if(j.getOrder() < i.getOrder())
+							i.visible = false;
 				}
 			}
 			
@@ -179,7 +179,7 @@ package game
 							if(i.overlaps(j))
 								if(j.getOrder() < i.getOrder())
 									if(j.isKilled == false)
-										i.visible = false
+										i.visible = false;
 						}
 					}
 					
@@ -201,15 +201,12 @@ package game
 		}
 		
 		private function checkOrder(sound:Tone):Boolean{
-			add(new FlxText(50,50,100, "sount.getOrder = " + sound.getOrder())); //DEBUG ZEILE
-			//return (sound.getOrder() == orderPos)
-			return true;
+			return (sound.getOrder() == orderPos)
 		}
 		
 		private function getColidedSound():Tone{
 			for each(var s:Tone in soundsCopy){
 					if (s.isCollided){
-						add(new FlxText(10,100,100, "colidetSound = " + s.getOrder())); //DEBUG ZEILE
 						return s;
 					}	
 					else continue;
@@ -227,7 +224,6 @@ package game
 			for(var i:int = 0; i < levelMaxOrder; i++){
 				randomToneIndex = FlxU.random() * all_tones.length;
 				randomPositionIndex = FlxU.random() * all_positions.length;
-				add(new FlxText(150,10 + 30*i,100, "pos = " + randomPositionIndex + ", bild = 0" + randomToneIndex)); // DEBUG Zeile INFO: Er kann nicht mehrere Elemente mit dem gleichen Ton bzw. Bild erzeugen! TOFIX
 				randomTone= new Tone(all_positions[randomPositionIndex][0],all_positions[randomPositionIndex][1],all_tones[randomToneIndex][1],all_tones[randomToneIndex][0],player,i);
 				randomTone.fixed = true;
 				randomTone.moves = false;
