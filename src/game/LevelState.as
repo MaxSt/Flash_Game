@@ -5,6 +5,8 @@ package game
 	import flash.ui.*;
 	import flash.utils.Timer;
 	
+	import flashx.textLayout.elements.OverflowPolicy;
+	
 	import org.flixel.*;
 	
 	public class LevelState extends FlxState
@@ -40,7 +42,7 @@ package game
 		private var timer:Number = 1;
 		
 		
-		public var levelMaxOrder:int;
+		public var levelMaxOrder:int = 3;
 		public var orderPos:int = 0;
 		
 		public var activeSound:Tone;
@@ -95,19 +97,27 @@ package game
 			
 			sounds = loadSoundGroup();
 			
+			for each(var i:Tone in sounds){
+				for each(var j:Tone in sounds){
+					if(i.overlaps(j))
+						if(j.getOrder() < s.getOrder())
+							i.visible = false
+				}
+			}
 			
 			
 			for each(var s:Tone in sounds){
 				soundsCopy.push(s); 
 			}
 			
-			sounds.reverse();
+			
 			
 			
 		}
 		
 		override public function update():void
 		{
+			
 			if (sounds.length > 0 ){
 				player.fixed = true;
 				player.moves = false;	
@@ -135,7 +145,6 @@ package game
 					if(sounds.length > 0){
 						sound = sounds.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 						this.add(sound);
-						sound.Added = true;
 					}
 					
 				}
@@ -156,7 +165,29 @@ package game
 					orderPos += 1;
 					//showScore();
 					activeSound.Collided = false;
+					activeSound.Killed = true;
 					activeSound.kill();
+					
+					for each(var s:Tone in soundsCopy){
+						s.visible = true;
+						sounds.push(s); 
+					}
+					
+					for each(var i:Tone in sounds){
+						for each(var j:Tone in sounds){
+							if(i.isKilled)
+								i.visible = false;
+							if(i.overlaps(j))
+								if(j.getOrder() < i.getOrder())
+									if(j.isKilled == false)
+										i.visible = false
+						}
+					}
+					
+					
+					
+					
+					
 					if(orderPos == levelMaxOrder){
 						timerSuccesGame.start();
 					}	
@@ -178,12 +209,10 @@ package game
 		
 		private function getColidedSound():Tone{
 			for each(var s:Tone in soundsCopy){
-				if(s){
-					if (s.isCollided){
-						add(new FlxText(10,100,100, "colidetSound = " + s.getOrder())); //DEBUG ZEILE
-						return s;
-					}	
-				}
+				if (s.isCollided){
+					add(new FlxText(10,100,100, "colidetSound = " + s.getOrder())); //DEBUG ZEILE
+					return s;
+				}	
 				else continue;
 			}
 			return null;
@@ -224,8 +253,6 @@ package game
 		{
 			sound = soundsShow.shift(); //shift removes the first of the vector, and the others shift 1 position to left
 			this.add(sound);
-			//add(new FlxText(70,10 + 80*sounds.length,100, "sound = " + sound.getOrder())); //DEBUG ZEILE
-			sound.Added = true;
 			FlxG.play(sound.getSound(),1,false);
 			sound.flicker(0.2);
 			kill = true;

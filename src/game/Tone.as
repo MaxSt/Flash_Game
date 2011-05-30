@@ -7,8 +7,9 @@ package game
 		private var player:Player;
 		private var sound:Class;
 		private var order:int;
+		private var killed:Boolean = false;
+
 		private var collided:Boolean;
-		private var added:Boolean = false;
 		private var ImgSound:Class;
 		
 		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, player:Player, order:int)
@@ -31,8 +32,6 @@ package game
 		
 		override public function update():void
 		{
-			if( FlxU.overlap(this.player, this))
-				this.Collided = true;		
 			if( collide(this.player) && !isCollided){
 				FlxG.play(sound,1,false);
 				flicker(0.2);
@@ -42,7 +41,7 @@ package game
 					player.reset(player.x + 2, player.y);
 				else if( collideTop )
 					player.reset(player.x - 15, player.y - 10);
-				
+				Collided = true;
 			}
 			super.update();
 		}
@@ -65,12 +64,12 @@ package game
 		}
 	
 		
-		public function set Added(a:Boolean):void{
-			this.added = a;
+		public function set Killed(k:Boolean):void{
+			this.killed = k;
 		}
 		
-		public function get isAdded():Boolean{
-			return this.added;
+		public function get isKilled():Boolean{
+			return this.killed;
 		}
 	}
 }
