@@ -80,8 +80,10 @@ package game
 			level.follow();
 
 			//score FlxText
-			score = new FlxText(160,230,200);
+			score = new FlxText(170,5,200);
 			score.setFormat(null, 5, 0x0000AA, "center",2);
+			
+			score.text = "Score: " + FlxG.score.toString();
 			
 			//Add game objects
 			var player:Player = new Player(150,210);
