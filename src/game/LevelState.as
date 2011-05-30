@@ -7,7 +7,7 @@ package game
 	
 	import org.flixel.*;
 	
-	public class PlayState extends FlxState
+	public class LevelState extends FlxState
 	{
 		//tone pictures
 		[Embed(source="../assets/images/toneA.png")] private var ImgA:Class;
@@ -19,7 +19,7 @@ package game
 		[Embed(source="../assets/sounds/toneA.mp3")] private var SoundA:Class;
 		[Embed(source="../assets/sounds/toneB.mp3")] private var SoundB:Class;
 		[Embed(source="../assets/sounds/toneC.mp3")] private var SoundC:Class;
-
+		
 		//private var all_tones:Vector.<Class,Class> = new Vector.<Class,Class>((ImgA,SoundA),(ImgB,SoundB),(ImgC,SoundC));
 		//private var all_positions:Vector.<int,int> = new Vector.<int,int>((50,5),(290,20),(170,210));
 		
@@ -38,9 +38,9 @@ package game
 		private var tonB:Tone;
 		
 		private var timer:Number = 1;
-
 		
-		public var levelMaxOrder:int = 3;
+		
+		public var levelMaxOrder:int;
 		public var orderPos:int = 0;
 		
 		public var activeSound:Tone;
@@ -55,9 +55,10 @@ package game
 		private var sounds:Vector.<Tone> = new Vector.<Tone>();
 		private var soundsShow:Vector.<Tone> = new Vector.<Tone>();
 		private var soundsCopy:Vector.<Tone> = new Vector.<Tone>();
-
-		public function PlayState()
+		
+		public function LevelState(level:int)
 		{	
+			levelMaxOrder = level;
 			FlxG.mouse.show();
 			this.addEventListener(Event.ACTIVATE,onFocus);
 			//FlxG.playMusic(bgmusic);
@@ -76,7 +77,7 @@ package game
 			level.auto = FlxTilemap.ALT;
 			level.loadMap(FlxTilemap.pngToCSV(PNGLevel_1,false,2),FlxTilemap.ImgAuto);
 			level.follow();
-
+			
 			//score FlxText
 			score = new FlxText(160,230,200);
 			score.setFormat(null, 5, 0x0000AA, "center",2);
@@ -90,17 +91,17 @@ package game
 			add(score);
 			add(player);
 			
-
-	
+			
+			
 			sounds = loadSoundGroup();
 			
-			sounds.reverse();
+			
 			
 			for each(var s:Tone in sounds){
 				soundsCopy.push(s); 
 			}
-	
 			
+			sounds.reverse();
 			
 			
 		}
@@ -136,7 +137,7 @@ package game
 						this.add(sound);
 						sound.Added = true;
 					}
-							
+					
 				}
 			}
 			
@@ -146,7 +147,7 @@ package game
 				FlxG.state = new GameOverState();
 			}
 			
-		
+			
 			
 			
 			activeSound = getColidedSound();
@@ -177,11 +178,13 @@ package game
 		
 		private function getColidedSound():Tone{
 			for each(var s:Tone in soundsCopy){
+				if(s){
 					if (s.isCollided){
 						add(new FlxText(10,100,100, "colidetSound = " + s.getOrder())); //DEBUG ZEILE
 						return s;
 					}	
-					else continue;
+				}
+				else continue;
 			}
 			return null;
 		}

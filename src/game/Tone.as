@@ -7,17 +7,15 @@ package game
 		private var player:Player;
 		private var sound:Class;
 		private var order:int;
-		private var pS:PlayState;
 		private var collided:Boolean;
 		private var added:Boolean = false;
 		private var ImgSound:Class;
 		
-		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, pS:PlayState, player:Player, order:int)
+		public function Tone(X:Number, Y:Number, sound:Class, ImgSound:Class, player:Player, order:int)
 		{
 			super(X,Y);
 			this.x = x;
 			this.y = y;
-			this.pS = pS;
 			this.player = player;
 			this.sound = sound;
 			this.order = order;
@@ -33,8 +31,9 @@ package game
 		
 		override public function update():void
 		{
+			if( FlxU.overlap(this.player, this))
+				this.Collided = true;		
 			if( collide(this.player) && !isCollided){
-				this.kill();
 				FlxG.play(sound,1,false);
 				flicker(0.2);
 				if( collideLeft )
@@ -43,7 +42,7 @@ package game
 					player.reset(player.x + 2, player.y);
 				else if( collideTop )
 					player.reset(player.x - 15, player.y - 10);
-				Collided = true;
+				
 			}
 			super.update();
 		}
