@@ -32,7 +32,7 @@ package game
 		//private var all_positions:Vector.<int,int> = new Vector.<int,int>((50,5),(290,20),(170,210));
 		
 		private var all_tones:Array = new Array( new Array(ImgA,SoundA), new Array(ImgB,SoundB), new Array(ImgC,SoundC), new Array(ImgD,SoundD), new Array(ImgE,SoundE), new Array(ImgF,SoundF) );
-		private var all_positions:Array = new Array( new Array(50,5), new Array(290,20), new Array(170,210) );
+		private var all_positions:Array = new Array( new Array(50,23), new Array(290,38), new Array(170,228), new Array(100,183), new Array(150,38), new Array(85,23), new Array(243,135));
 		
 		
 		//level maps
@@ -86,10 +86,8 @@ package game
 			level.follow();
 
 			//score FlxText
-			score = new FlxText(170,5,200);
+			score = new FlxText(160,230,200);
 			score.setFormat(null, 5, 0x0000AA, "center",2);
-			
-			score.text = "Score: " + FlxG.score.toString();
 			
 			//Add game objects
 			var player:Player = new Player(150,210);
