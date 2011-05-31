@@ -48,7 +48,7 @@ package game
 		private var timer:Number = 1;
 
 		
-		public var levelMaxOrder:int = 3;
+		public var levelMaxOrder:int = 1;
 		public var orderPos:int = 0;
 		
 		public var activeSound:Tone;

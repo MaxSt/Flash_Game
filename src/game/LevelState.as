@@ -6,6 +6,7 @@ package game
 	import flash.utils.Timer;
 	
 	import flashx.textLayout.elements.OverflowPolicy;
+	import flashx.textLayout.formats.LeadingModel;
 	
 	import org.flixel.*;
 	
@@ -56,15 +57,22 @@ package game
 		private var timerAddTone:Timer = new Timer(2000,1);
 		private var timerSuccesGame:Timer = new Timer(1000,1);
 		private var timerRepeatSound:Timer = new Timer(1000,1);
+		private var timerShowLevelText:Timer = new Timer(1000,1);
+		
+		
 		
 		private var sound:Tone;
 		private var sounds:Vector.<Tone> = new Vector.<Tone>();
 		private var soundsShow:Vector.<Tone> = new Vector.<Tone>();
 		private var soundsCopy:Vector.<Tone> = new Vector.<Tone>();
 		
+		private var levelText:FlxText;
+		
 		public function LevelState(level:int)
 		{	
 			levelMaxOrder = level;
+			levelText =  new FlxText(FlxG.width * 0.5 -150, 50, 300, "Level " + levelMaxOrder );
+			levelText.setFormat(null, 20, 0x0000AA, "center",2);
 			FlxG.mouse.show();
 			this.addEventListener(Event.ACTIVATE,onFocus);
 			//FlxG.playMusic(bgmusic);
@@ -75,6 +83,7 @@ package game
 		{
 			FlxState.bgColor = 0xffaaaaff;
 			
+			timerShowLevelText.addEventListener(TimerEvent.TIMER_COMPLETE,hideLevelText);
 			timerAddTone.addEventListener(TimerEvent.TIMER_COMPLETE,addTone);
 			timerSuccesGame.addEventListener(TimerEvent.TIMER_COMPLETE,playAgain);
 			
@@ -95,7 +104,9 @@ package game
 			
 			add(level);
 			add(score);
+			add(levelText);
 			add(player);
+			
 			
 			
 			
@@ -121,7 +132,7 @@ package game
 		
 		override public function update():void
 		{
-			
+			timerShowLevelText.start();
 			if (sounds.length > 0 ){
 				player.fixed = true;
 				player.moves = false;	
@@ -248,6 +259,14 @@ package game
 			}
 			return count;
 		}
+		
+		
+		
+		private function hideLevelText(e:TimerEvent):void
+		{
+			levelText.visible = false;
+		}
+		
 		
 		private function addTone(e:TimerEvent):void
 		{
