@@ -6,8 +6,9 @@ package game
 	{
 		//public var arrow:Arrow = new Arrow();
 		
-		public function GameOverState()
+		public function GameOverState( score:int )
 		{
+			FlxG.score = score;
 			super();	
 		}
 		
@@ -26,7 +27,11 @@ package game
 			
 			var start:FlxText = new FlxText(FlxG.width * 0.5 -150, 50, 300, "GAME OVER\n\nPress ENTER to PLAY AGAIN");
 			start.setFormat(null, 20, 0x0000AA, "center",2);
+			var labelScore:FlxText = new FlxText(FlxG.width * 0.5 -150, 180, 300, "Your Score: " + FlxG.score );
+			labelScore.setFormat(null, 15, 0xAA0000, "center",2);
+			
 			add(start);
+			add(labelScore);
 		}
 		
 		override public function update():void{
