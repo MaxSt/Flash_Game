@@ -86,9 +86,9 @@ package game
 			level.follow();
 
 			//score FlxText
-			labelScore = new FlxText(150,1,200);
+			labelScore = new FlxText(150,15,200);
 			labelScore.setFormat(null, 8, 0xFFFFFF, "center",2);
-			score = new FlxText(170,1,200);
+			score = new FlxText(170,15,200);
 			score.setFormat(null, 8, 0xFFFFFF, "center",2);
 			
 			labelScore.text = "Score: ";
@@ -165,7 +165,7 @@ package game
 			
 			if( !this.player.onScreen() ){
 				this.player.kill();
-				FlxG.state = new GameOverState();
+				FlxG.state = new GameOverState( FlxG.score );
 			}
 			
 		
@@ -175,7 +175,8 @@ package game
 			if(activeSound){
 				if( checkOrder(activeSound) ){
 					orderPos += 1;
-					score.text = ( FlxG.score + 1 ).toString();
+					FlxG.score = FlxG.score + 1;
+					score.text = ( FlxG.score ).toString();
 					activeSound.Collided = false;
 					activeSound.Killed = true;
 					activeSound.kill();
@@ -204,7 +205,7 @@ package game
 						timerSuccesGame.start();
 					}	
 				}else{
-					FlxG.state = new GameOverState();
+					FlxG.state = new GameOverState( FlxG.score );
 				}
 			}
 			

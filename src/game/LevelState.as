@@ -38,6 +38,7 @@ package game
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
 		
 		private var level:FlxTilemap;
+		private var labelScore:FlxText;
 		private var score:FlxText
 		private var player:Player;
 		private var tonA:Tone;
@@ -94,8 +95,14 @@ package game
 			level.follow();
 			
 			//score FlxText
-			score = new FlxText(160,230,200);
-			score.setFormat(null, 5, 0x0000AA, "center",2);
+			labelScore = new FlxText(150,15,200);
+			labelScore.setFormat(null, 8, 0xFFFFFF, "center",2);
+			score = new FlxText(170,15,200);
+			score.setFormat(null, 8, 0xFFFFFF, "center",2);
+			
+			labelScore.text = "Score: ";
+			score.text = FlxG.score.toString();
+			labelScore.text.concat(score.text);
 			
 			//Add game objects
 			var player:Player = new Player(150,210);
@@ -103,6 +110,7 @@ package game
 			FlxG.follow(player);
 			
 			add(level);
+			add(labelScore);
 			add(score);
 			add(levelText);
 			add(player);
@@ -168,7 +176,7 @@ package game
 			
 			if( !this.player.onScreen() ){
 				this.player.kill();
-				FlxG.state = new GameOverState();
+				FlxG.state = new GameOverState( FlxG.score );
 			}
 			
 			
@@ -178,7 +186,8 @@ package game
 			if(activeSound){
 				if( checkOrder(activeSound) ){
 					orderPos += 1;
-					//showScore();
+					FlxG.score = FlxG.score + 1;
+					score.text = ( FlxG.score ).toString();
 					activeSound.Collided = false;
 					activeSound.Killed = true;
 					activeSound.kill();
@@ -207,7 +216,7 @@ package game
 						timerSuccesGame.start();
 					}	
 				}else{
-					FlxG.state = new GameOverState();
+					FlxG.state = new GameOverState( FlxG.score );
 				}
 			}
 			
