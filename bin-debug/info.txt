@@ -1,0 +1,2 @@
+Um das Spiel auf einem Server zu Installieren  müssen alle daten die in dem Zip ordner sind,
+auf den FTP Server in einen Ordner kopiert werden.
