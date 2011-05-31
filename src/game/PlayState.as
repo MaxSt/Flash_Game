@@ -32,8 +32,7 @@ package game
 		//private var all_positions:Vector.<int,int> = new Vector.<int,int>((50,5),(290,20),(170,210));
 		
 		private var all_tones:Array = new Array( new Array(ImgA,SoundA), new Array(ImgB,SoundB), new Array(ImgC,SoundC), new Array(ImgD,SoundD), new Array(ImgE,SoundE), new Array(ImgF,SoundF) );
-		private var all_positions:Array = new Array( new Array(50,23), new Array(290,38), new Array(170,228), new Array(100,183), new Array(150,38), new Array(85,23), new Array(243,135));
-		
+		private var all_positions:Array = new Array( new Array(50,23), new Array(290,38), new Array(170,228), new Array(100,183), new Array(150,40), new Array(85,23), new Array(243,135));
 		
 		//level maps
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;

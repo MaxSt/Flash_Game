@@ -15,18 +15,22 @@ package game
 		[Embed(source="../assets/images/toneA.png")] private var ImgA:Class;
 		[Embed(source="../assets/images/toneB.png")] private var ImgB:Class;
 		[Embed(source="../assets/images/toneC.png")] private var ImgC:Class;
+		[Embed(source="../assets/images/toneD.png")] private var ImgD:Class;
+		[Embed(source="../assets/images/toneE.png")] private var ImgE:Class;
+		[Embed(source="../assets/images/toneF.png")] private var ImgF:Class;
 		
 		
 		//tone sounds
 		[Embed(source="../assets/sounds/toneA.mp3")] private var SoundA:Class;
 		[Embed(source="../assets/sounds/toneB.mp3")] private var SoundB:Class;
 		[Embed(source="../assets/sounds/toneC.mp3")] private var SoundC:Class;
+		[Embed(source="../assets/sounds/toneD.mp3")] private var SoundD:Class;
+		[Embed(source="../assets/sounds/toneE.mp3")] private var SoundE:Class;
+		[Embed(source="../assets/sounds/toneF.mp3")] private var SoundF:Class;
 		
-		//private var all_tones:Vector.<Class,Class> = new Vector.<Class,Class>((ImgA,SoundA),(ImgB,SoundB),(ImgC,SoundC));
-		//private var all_positions:Vector.<int,int> = new Vector.<int,int>((50,5),(290,20),(170,210));
 		
-		private var all_tones:Array = new Array( new Array(ImgA,SoundA), new Array(ImgB,SoundB), new Array(ImgC,SoundC) );
-		private var all_positions:Array = new Array( new Array(50,5), new Array(290,20), new Array(170,210) );
+		private var all_tones:Array = new Array( new Array(ImgA,SoundA), new Array(ImgB,SoundB), new Array(ImgC,SoundC), new Array(ImgD,SoundD), new Array(ImgE,SoundE), new Array(ImgF,SoundF) );
+		private var all_positions:Array = new Array( new Array(50,23), new Array(290,38), new Array(170,228), new Array(100,183), new Array(150,40), new Array(85,23), new Array(243,135));
 		
 		
 		//level maps
