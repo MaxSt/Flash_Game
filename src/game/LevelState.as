@@ -73,7 +73,7 @@ package game
 		{	
 			levelMaxOrder = level;
 			levelText =  new FlxText(FlxG.width * 0.5 -150, 50, 300, "Level " + levelMaxOrder );
-			levelText.setFormat(null, 20, 0x0000AA, "center",2);
+			levelText.setFormat(null, 20, 0xFF0000, "center",2);
 			FlxG.mouse.show();
 			this.addEventListener(Event.ACTIVATE,onFocus);
 			//FlxG.playMusic(bgmusic);
