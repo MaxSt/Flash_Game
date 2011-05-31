@@ -91,8 +91,6 @@ package game
 			labelScore.setFormat(null, 8, 0xFFFFFF, "center",2);
 			score = new FlxText(170,1,200);
 			score.setFormat(null, 8, 0xFFFFFF, "center",2);
-			score = new FlxText(160,230,200);
-			score.setFormat(null, 5, 0x0000AA, "center",2);
 			
 			labelScore.text = "Score: ";
 			score.text = FlxG.score.toString();
