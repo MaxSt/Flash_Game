@@ -32,7 +32,8 @@ package game
 		//private var all_positions:Vector.<int,int> = new Vector.<int,int>((50,5),(290,20),(170,210));
 		
 		private var all_tones:Array = new Array( new Array(ImgA,SoundA), new Array(ImgB,SoundB), new Array(ImgC,SoundC), new Array(ImgD,SoundD), new Array(ImgE,SoundE), new Array(ImgF,SoundF) );
-		private var all_positions:Array = new Array( new Array(50,23), new Array(290,38), new Array(170,228), new Array(100,183), new Array(150,40), new Array(85,23), new Array(243,135));
+		private var all_positions:Array = new Array( new Array(50,23), new Array(290,38), new Array(170,228), new Array(100,183), new Array(150,38), new Array(85,23), new Array(243,135));
+		
 		
 		//level maps
 		[Embed(source="../assets/images/Level_1.png")] private var PNGLevel_1:Class;
@@ -86,6 +87,7 @@ package game
 			level.follow();
 
 			//score FlxText
+<<<<<<< HEAD
 			labelScore = new FlxText(150,1,200);
 			labelScore.setFormat(null, 8, 0xFFFFFF, "center",2);
 			score = new FlxText(170,1,200);
@@ -95,6 +97,11 @@ package game
 			score.text = FlxG.score.toString();
 			labelScore.text.concat(score.text);
 			
+=======
+			score = new FlxText(160,230,200);
+			score.setFormat(null, 5, 0x0000AA, "center",2);
+			
+>>>>>>> ad4a2639971a1c669e98d827a37e43230c2d33cc
 			//Add game objects
 			var player:Player = new Player(150,210);
 			setPlayer(player);
